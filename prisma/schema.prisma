@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  name        String?
+  clerkUserId String   @unique
+  bio         String?
+
+  reviews     Review[]
+  likes       Like[]
+  posts       Post[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Place {
+  id            String  @id @default(uuid())
+  googlePlaceId String  @unique
+  name          String
+  lat           Float
+  lng           Float
+  imageUrl      String?
+  cityId        String  
+  city          City     @relation(fields: [cityId], references: [id]) // relația directă
+  description   String?  
+  reviews       Review[]
+  likes         Like[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Review {
+  id        String  @id @default(uuid())
+  content   String
+  rating    Int
+  authorId  String
+  placeId   String
+  author    User     @relation(fields: [authorId], references: [id])
+  place     Place    @relation(fields: [placeId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Like {
+  id       String  @id @default(uuid())
+  userId   String
+  placeId  String?  
+  postId   String? 
+  user     User    @relation(fields: [userId], references: [id])
+  place    Place?  @relation(fields: [placeId], references: [id])
+  post     Post?   @relation(fields: [postId], references: [id])
+
+  @@unique([userId, placeId])
+  @@unique([userId, postId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  authorId  String
+  content   String
+  imageUrl  String?  
+  author    User     @relation(fields: [authorId], references: [id])
+  likes     Like[]
+
+  cityId    String
+  city      City     @relation(fields: [cityId], references: [googlePlaceId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model City {
+  id            String  @id @default(uuid())
+  googlePlaceId String  @unique
+  cityName String   
+  places        Place[]
+  posts         Post[]   // 🔹 postările din oraș
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
