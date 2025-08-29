@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   images: {
     domains: [
       "res.cloudinary.com", // Cloudinary
-      "lh3.googleusercontent.com", // Google API (ex: profiluri / imagini Google)
+      "maps.googleapis.com", // Google API (ex: profiluri / imagini Google)
     ],
   },
 };
