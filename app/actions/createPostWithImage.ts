@@ -24,6 +24,7 @@ export async function createPostWithImage(formData: FormData) {
     city = await db.city.create({
       data: {
         googlePlaceId: cityIdFromForm,
+        cityName: cityName ?? "",
       },
     });
   }

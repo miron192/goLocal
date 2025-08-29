@@ -38,10 +38,9 @@ export async function getCityData(placeId: string) {
 
     const cityName = data.result.name;
 
-    // Salvăm orașul în DB folosind googlePlaceId + cityName
     await checkCity({
       cityId: placeId,
-      cityName, // 👈 trimitem numele
+      cityName,
     });
 
     return data.result;

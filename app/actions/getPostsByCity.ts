@@ -3,7 +3,12 @@
 import { db } from "@/lib/db";
 import { checkCity } from "@/lib/checkCity";
 
-export async function getPostsByCity(placeId: string, page = 1, limit = 10) {
+export async function getPostsByCity(
+  placeId: string,
+  page = 1,
+  limit = 10,
+  cityName: string
+) {
   if (!placeId) {
     console.error("Nu ai trimis placeId");
     return null;

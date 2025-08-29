@@ -10,7 +10,7 @@ import SearchBar from "./Searchbar";
 
 export default function Header() {
   return (
-    <header className="flex justify-between p-4 items-center border-2 border-gray-200/50 rounded-3xl h-20 bg-white/20 sticky z-50 shadow-xs top-0">
+    <header className="flex justify-between p-4 items-center border-2 border-gray-200/50 rounded-3xl h-20 bg-white/20 sticky z-50 shadow-xs top-0 backdrop-blur-xs">
       <Link
         href="/"
         className="text-2xl font-bold transition-all duration-200 ease-out  hover:scale-[1.03]"

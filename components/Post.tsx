@@ -7,8 +7,10 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Heart } from "lucide-react";
 import Link from "next/link";
+import LikeButton from "./LikeButton";
+import { deletePost } from "@/app/actions/deletePost"; // 👈 import acțiunea server
+import Image from "next/image";
 
 type PostProps = {
   id: string;
@@ -21,19 +23,31 @@ type PostProps = {
     imageUrl?: string | null;
   };
   likes: { id: string; userId: string }[];
-  city: { id: string; cityName: string }; // 👈 obiect, nu string
+  city: { id: string; cityName: string };
+  isOwner?: boolean;
 };
 
 export default function Post({
+  id,
   content,
   imageUrl,
   createdAt,
   author,
   likes,
-  city, // 👈 extras
+  city,
+  isOwner,
 }: PostProps) {
+  async function handleDelete() {
+    try {
+      await deletePost(author.id, id); // 👈 apel direct
+      window.location.reload(); // sau un state update
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
+  }
+
   return (
-    <Card className="w-full max-w-md mx-auto shadow-lg rounded-2xl border border-gray-200">
+    <Card className="w-full max-w-md mx-auto shadow-lg rounded-2xl border border-gray-200 mt-5 relative">
       <CardHeader className="flex items-center gap-3">
         <Link href={`/user/${author.id}`}>
           <Avatar>
@@ -55,28 +69,35 @@ export default function Post({
               year: "numeric",
             })}
           </p>
-          {city && ( // 👈 afișat doar dacă există
-            <p className="text-xs text-gray-400">{city.cityName}</p>
-          )}
+          {city && <p className="text-xs text-gray-400">{city.cityName}</p>}
         </div>
+
+        {/* Buton delete doar pt owner */}
+        {isOwner && (
+          <button
+            onClick={handleDelete}
+            className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
+          >
+            ✖
+          </button>
+        )}
       </CardHeader>
 
       <CardContent>
         {imageUrl && (
-          <img
+          <Image
             src={imageUrl}
             alt="post"
             className="w-full rounded-xl object-cover max-h-96"
+            width={384}
+            height={384}
           />
         )}
         <p className="text-gray-700 mt-3">{content}</p>
       </CardContent>
 
       <CardFooter className="flex items-center justify-between">
-        <button className="flex items-center gap-1 text-gray-600 hover:text-red-500 transition-colors">
-          <Heart className="w-5 h-5" />
-          <span>{likes.length}</span>
-        </button>
+        <LikeButton postId={id} likes={likes.length} />
       </CardFooter>
     </Card>
   );

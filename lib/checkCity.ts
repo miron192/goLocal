@@ -8,22 +8,27 @@ export const checkCity = async ({
   cityName?: string;
 }) => {
   const city = await db.city.findUnique({
-    where: {
-      googlePlaceId: cityId,
-    },
+    where: { googlePlaceId: cityId },
   });
 
   if (city) {
-    return db.city.update({
-      where: { googlePlaceId: cityId },
-      data: { cityName },
-    });
+    if (cityName && cityName !== city.cityName) {
+      return db.city.update({
+        where: { googlePlaceId: cityId },
+        data: { cityName },
+      });
+    }
+    return city;
+  }
+
+  if (!cityName) {
+    throw new Error("cityName is required to create a new city");
   }
 
   return db.city.create({
     data: {
       googlePlaceId: cityId,
-      cityName: cityName ?? "",
+      cityName,
     },
   });
 };

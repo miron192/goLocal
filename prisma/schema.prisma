@@ -53,19 +53,17 @@ model Review {
 }
 
 model Like {
-  id       String  @id @default(uuid())
+  id       String @id @default(uuid())
   userId   String
-  placeId  String?  
-  postId   String? 
-  user     User    @relation(fields: [userId], references: [id])
-  place    Place?  @relation(fields: [placeId], references: [id])
-  post     Post?   @relation(fields: [postId], references: [id])
+  postId   String?
+  placeId  String?
 
-  @@unique([userId, placeId])
+  user     User   @relation(fields: [userId], references: [id])
+  post     Post?  @relation(fields: [postId], references: [id])
+  place    Place? @relation(fields: [placeId], references: [id])
+
   @@unique([userId, postId])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@unique([userId, placeId])
 }
 
 model Post {

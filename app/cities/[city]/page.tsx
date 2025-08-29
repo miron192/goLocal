@@ -1,14 +1,14 @@
 import { getCityData } from "@/app/actions/getCityData";
 import { getPostsByCity } from "@/app/actions/getPostsByCity";
 import Post from "@/components/Post";
-import Rate from "@/components/Rate";
+import Image from "next/image";
 
 export default async function page(props: {
   params: Promise<{ city: string }>;
 }) {
   const params = await props.params;
   const city = await getCityData(params.city);
-  const posts = await getPostsByCity(params.city);
+  const posts = await getPostsByCity(params.city, 1, 10, city.name);
 
   if (!city)
     return (
@@ -30,7 +30,6 @@ export default async function page(props: {
           <h1 className="text-3xl font-extrabold mb-4 text-gray-800">
             City: <span className="text-green-600">{city.name}</span>
           </h1>
-          <Rate cityId={params.city} />
         </div>
 
         <p className="mb-2 text-gray-700">
@@ -48,11 +47,13 @@ export default async function page(props: {
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">Photos:</h2>
         <div className="flex flex-wrap gap-4 justify-center">
           {city.photos?.map((photo: any) => (
-            <img
+            <Image
               key={photo.photo_reference}
               src={getPhotoUrl(photo.photo_reference)}
               alt={`Photo from ${city.name}`}
               className="w-48 h-48 rounded-2xl shadow-lg hover:scale-105 transition-transform duration-300 ease-out cursor-pointer object-cover"
+              width={192}
+              height={192}
             />
           ))}
         </div>

@@ -5,6 +5,7 @@ import { createPostWithImage } from "../actions/createPostWithImage";
 import { useRouter } from "next/navigation";
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import CityAutocompleteInput from "@/components/CityAutocompleteInput";
+import Image from "next/image";
 
 export default function NewPostPage() {
   const router = useRouter();
@@ -107,10 +108,12 @@ export default function NewPostPage() {
             Choose Image
           </label>
           {preview && (
-            <img
+            <Image
               src={preview}
               alt="Preview"
               className="rounded-xl max-h-80 object-cover"
+              width={192}
+              height={192}
             />
           )}
           {error && <p className="text-red-500 text-sm">{error}</p>}
