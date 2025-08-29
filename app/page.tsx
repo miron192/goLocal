@@ -1,5 +1,6 @@
 import Guest from "@/components/Guest";
 import { checkUser } from "@/lib/checkUser";
+import Link from "next/link";
 
 export default async function Home() {
   const dbUser = await checkUser();
@@ -23,22 +24,14 @@ export default async function Home() {
       </p>
 
       <div className="mt-8 flex gap-4">
-        {/* <Link
-          href="cities"
+        <Link
+          href="new-post"
           className="relative overflow-hidden rounded-full font-medium text-sm sm:text-base h-12 px-6
           bg-green-600 text-white backdrop-blur-md border border-white/20  flex items-center
           transition-all duration-200 ease-out hover:scale-[1.03] hover:shadow-[0_8px_30px_rgba(0,255,128,0.25)] cursor-pointer"
         >
-          Explore Cities
+          New Post
         </Link>
-        <Link
-          href="profile"
-          className="relative overflow-hidden rounded-full font-medium text-sm sm:text-base h-12 px-6 cursor-pointer 
-          bg-white text-green-700 backdrop-blur-md border border-green-200  flex items-center
-          transition-all duration-200 ease-out hover:scale-[1.03] hover:shadow-[0_8px_30px_rgba(0,255,128,0.15)]"
-        >
-          My Profile
-        </Link> */}
       </div>
     </main>
   );
